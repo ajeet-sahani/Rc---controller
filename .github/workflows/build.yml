@@ -30,11 +30,19 @@ jobs:
             git zip unzip openjdk-17-jdk \
             python3-pip autoconf libtool pkg-config \
             zlib1g-dev libncurses5-dev libncursesw5-dev \
-            libtinfo5 cmake libffi-dev libssl-dev
+            libtinfo5 cmake libffi-dev libssl-dev \
+            build-essential libltdl-dev \
+            libsqlite3-dev sqlite3 \
+            bzip2 libbz2-dev \
+            libreadline-dev liblzma-dev
+
+      - name: Initialize Buildozer
+        run: |
+          buildozer init || true
 
       - name: Build APK
         run: |
-          buildozer android debug
+          buildozer -v android debug
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
@@ -44,7 +52,7 @@ jobs:
 
       - name: Build AAB
         run: |
-          buildozer android release
+          buildozer -v android release
 
       - name: Upload AAB
         uses: actions/upload-artifact@v4
