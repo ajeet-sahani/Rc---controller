@@ -1,55 +1,53 @@
 name: Build Kivy APK
 
 on:
-push:
-branches: [ "main" ]
-workflow_dispatch:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
 
 jobs:
-build:
-runs-on: ubuntu-latest
+  build:
+    runs-on: ubuntu-latest
 
-```
-steps:
-- name:  Checkout Repository
-  uses: actions/checkout@v4
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-- name:  Setup Python
-  uses: actions/setup-python@v5
-  with:
-    python-version: '3.10'
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
 
-- name: Install Dependencies
-  run: |
-    python -m pip install --upgrade pip
-    pip install buildozer cython
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install buildozer cython
 
-- name:  Install System Dependencies
-  run: |
-    sudo apt update
-    sudo apt install -y \
-      git zip unzip openjdk-17-jdk \
-      python3-pip autoconf libtool pkg-config \
-      zlib1g-dev libncurses5-dev libncursesw5-dev \
-      libtinfo5 cmake libffi-dev libssl-dev
+      - name: Install System Dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y \
+            git zip unzip openjdk-17-jdk \
+            python3-pip autoconf libtool pkg-config \
+            zlib1g-dev libncurses5-dev libncursesw5-dev \
+            libtinfo5 cmake libffi-dev libssl-dev
 
-- name:  Build APK
-  run: |
-    buildozer android debug
+      - name: Build APK
+        run: |
+          buildozer android debug
 
-- name:  Upload APK
-  uses: actions/upload-artifact@v4
-  with:
-    name: apk-file
-    path: bin/*.apk
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: apk-file
+          path: bin/*.apk
 
-- name:  Build AAB (Play Store)
-  run: |
-    buildozer android release
+      - name: Build AAB
+        run: |
+          buildozer android release
 
-- name:  Upload AAB
-  uses: actions/upload-artifact@v4
-  with:
-    name: aab-file
-    path: bin/*.aab
-```
+      - name: Upload AAB
+        uses: actions/upload-artifact@v4
+        with:
+          name: aab-file
+          path: bin/*.aab
